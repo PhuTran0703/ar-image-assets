@@ -1,4 +1,5 @@
-# Mỗi lần push: tạo catalog.json (danh sách ảnh) rồi deploy images/ lên GitHub Pages.
+# Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json) rồi deploy
+# images/ lên GitHub Pages.
 name: Deploy Pages
 
 on:
@@ -37,9 +38,16 @@ jobs:
               for name in names
               if name.lower().endswith(exts)
           )
+          titles = {}
+          if os.path.exists('titles.json'):
+              with open('titles.json', encoding='utf-8') as f:
+                  raw = json.load(f)
+              titles = {p: t.strip() for p, t in raw.items()
+                        if p in set(files) and isinstance(t, str) and t.strip()}
           with open('_site/catalog.json', 'w', encoding='utf-8') as f:
-              json.dump({'version': 1, 'files': files}, f, ensure_ascii=False)
-          print(f'{len(files)} files')
+              json.dump({'version': 1, 'files': files, 'titles': titles}, f,
+                        ensure_ascii=False)
+          print(f'{len(files)} files, {len(titles)} titles')
           PY
 
       - uses: actions/upload-pages-artifact@v3
