@@ -1,0 +1,50 @@
+# Mỗi lần push: tạo catalog.json (danh sách ảnh) rồi deploy images/ lên GitHub Pages.
+name: Deploy Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build site + catalog.json
+        run: |
+          mkdir _site
+          cp -R images _site/images
+          python3 - <<'PY'
+          import json, os
+          exts = ('.png', '.jpg', '.jpeg', '.webp', '.gif')
+          files = sorted(
+              os.path.join(root, name).replace(os.sep, '/')
+              for root, _, names in os.walk('images')
+              for name in names
+              if name.lower().endswith(exts)
+          )
+          with open('_site/catalog.json', 'w', encoding='utf-8') as f:
+              json.dump({'version': 1, 'files': files}, f, ensure_ascii=False)
+          print(f'{len(files)} files')
+          PY
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
