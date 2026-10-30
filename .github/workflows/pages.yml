@@ -1,4 +1,5 @@
-# Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json) rồi deploy
+# Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json + hash nội
+# dung để app nhận ảnh đã sửa) rồi deploy
 # images/ lên GitHub Pages.
 name: Deploy Pages
 
@@ -30,7 +31,7 @@ jobs:
           mkdir _site
           cp -R images _site/images
           python3 - <<'PY'
-          import json, os
+          import hashlib, json, os
           exts = ('.png', '.jpg', '.jpeg', '.webp', '.gif')
           files = sorted(
               os.path.join(root, name).replace(os.sep, '/')
@@ -44,9 +45,13 @@ jobs:
                   raw = json.load(f)
               titles = {p: t.strip() for p, t in raw.items()
                         if p in set(files) and isinstance(t, str) and t.strip()}
+          versions = {}
+          for p in files:
+              with open(p, 'rb') as f:
+                  versions[p] = hashlib.sha1(f.read()).hexdigest()[:10]
           with open('_site/catalog.json', 'w', encoding='utf-8') as f:
-              json.dump({'version': 1, 'files': files, 'titles': titles}, f,
-                        ensure_ascii=False)
+              json.dump({'version': 1, 'files': files, 'titles': titles,
+                         'versions': versions}, f, ensure_ascii=False)
           print(f'{len(files)} files, {len(titles)} titles')
           PY
 
