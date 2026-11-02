@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — AR Drawora</title>
+<script>
+(function () {
+  var map = {vi:'vi',ja:'ja',es:'es',pt:'pt_BR',ko:'ko',fr:'fr',de:'de',id:'id','in':'id',th:'th',ar:'ar'};
+  var langs = navigator.languages || [navigator.language || 'en'];
+  var code = 'en';
+  for (var i = 0; i < langs.length; i++) {
+    var l = (langs[i] || '').toLowerCase();
+    if (l.indexOf('zh') === 0) { code = /hant|tw|hk|mo/.test(l) ? 'zh_Hant' : 'zh_Hans'; break; }
+    var base = l.split('-')[0];
+    if (map[base]) { code = map[base]; break; }
+    if (base === 'en') break;
+  }
+  location.replace(code + '/privacy-policy.html');
+})();
+</script>
+<noscript><meta http-equiv="refresh" content="0; url=en/privacy-policy.html"></noscript>
+</head>
+<body><p><a href="en/privacy-policy.html">Privacy Policy</a></p></body>
+</html>

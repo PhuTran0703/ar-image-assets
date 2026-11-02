@@ -1,6 +1,6 @@
 # Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json + hash nội
 # dung để app nhận ảnh đã sửa + ngày thêm ảnh cho mục "New" trên Home) rồi deploy
-# images/ lên GitHub Pages.
+# images/ + legal/ lên GitHub Pages.
 name: Deploy Pages
 
 on:
@@ -33,6 +33,8 @@ jobs:
         run: |
           mkdir _site
           cp -R images _site/images
+          # Privacy Policy / Terms of Use (13 ngôn ngữ) cho app và store.
+          cp -R legal _site/legal
           python3 - <<'PY'
           import hashlib, json, os, subprocess
           exts = ('.png', '.jpg', '.jpeg', '.webp', '.gif')
