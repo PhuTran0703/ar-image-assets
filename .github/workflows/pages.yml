@@ -1,5 +1,5 @@
 # Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json + hash nội
-# dung để app nhận ảnh đã sửa) rồi deploy
+# dung để app nhận ảnh đã sửa + ngày thêm ảnh cho mục "New" trên Home) rồi deploy
 # images/ lên GitHub Pages.
 name: Deploy Pages
 
@@ -25,13 +25,16 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Cần toàn bộ lịch sử để biết ngày thêm từng ảnh.
+          fetch-depth: 0
 
       - name: Build site + catalog.json
         run: |
           mkdir _site
           cp -R images _site/images
           python3 - <<'PY'
-          import hashlib, json, os
+          import hashlib, json, os, subprocess
           exts = ('.png', '.jpg', '.jpeg', '.webp', '.gif')
           files = sorted(
               os.path.join(root, name).replace(os.sep, '/')
@@ -49,10 +52,31 @@ jobs:
           for p in files:
               with open(p, 'rb') as f:
                   versions[p] = hashlib.sha1(f.read()).hexdigest()[:10]
+          # Ngày thêm ảnh (unix giây) từ git: lần "A" gần nhất của path đó.
+          # --no-renames: ảnh chuyển chủ đề tính là mới ở chủ đề mới.
+          # Bỏ qua đợt nhập ban đầu (commit thêm ảnh đầu tiên) — không phải "mới".
+          log = subprocess.run(
+              ['git', 'log', '--no-renames', '--diff-filter=A',
+               '--name-only', '--format=@@%H %ct', '--', 'images'],
+              capture_output=True, text=True, check=True).stdout
+          adds, commit, stamp = [], None, None
+          for line in log.splitlines():
+              if line.startswith('@@'):
+                  commit, stamp = line[2:].split()
+              elif line.strip():
+                  adds.append((line.strip(), commit, int(stamp)))
+          baseline = adds[-1][1] if adds else None
+          added = {}
+          for path, sha, ts in adds:  # mới nhất trước
+              if path in added or path not in versions:
+                  continue
+              added[path] = 0 if sha == baseline else ts
+          added = {p: ts for p, ts in added.items() if ts}
           with open('_site/catalog.json', 'w', encoding='utf-8') as f:
               json.dump({'version': 1, 'files': files, 'titles': titles,
-                         'versions': versions}, f, ensure_ascii=False)
-          print(f'{len(files)} files, {len(titles)} titles')
+                         'versions': versions, 'added': added}, f,
+                        ensure_ascii=False)
+          print(f'{len(files)} files, {len(titles)} titles, {len(added)} new')
           PY
 
       - uses: actions/upload-pages-artifact@v3
