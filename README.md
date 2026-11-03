@@ -43,6 +43,18 @@ Mỗi ảnh thuộc một trong 3 loại, khai báo trong `access.json`:
 
 Ảnh **không có** trong `access.json` được app tự chia theo vị trí trong chủ đề (40% free / 35% ad / 25% premium, xen kẽ, 2 ảnh đầu free). Giá trị sai hoặc path không tồn tại bị bỏ qua (xem log của Action). Cú pháp giống `titles.json`: dòng cuối không có dấu phẩy.
 
+### 3b. Dịch tên hiển thị (tuỳ chọn)
+
+Tên trong `titles.json` là tiếng Anh. Bản dịch nằm trong `title_translations/<mã ngôn ngữ>.json` (12 file: `vi`, `ja`, `ko`, `zh_Hans`, `zh_Hant`, `es`, `pt_BR`, `fr`, `de`, `id`, `th`, `ar`). Khoá là **tên tiếng Anh** (không phải path ảnh):
+
+```json
+"Santa Sleigh Reindeer": "Ông già Noel cưỡi xe tuần lộc",
+```
+
+- Thêm một dòng vào mỗi file cho mỗi tên mới. Cú pháp giống `titles.json`.
+- Tên chưa dịch thì app hiện tiếng Anh. Log của Action in số tên còn thiếu ở từng ngôn ngữ.
+- App chỉ tải file của ngôn ngữ đang dùng, và chỉ khi file đó thay đổi.
+
 ### 4. Đẩy lên GitHub
 
 ```
@@ -58,7 +70,7 @@ Hoặc trên web: **Add file → Upload files**, rồi **Commit changes**.
 
 Vào [Actions](https://github.com/PhuTran0703/ar-image-assets/actions) và đợi lần chạy mới nhất hiện ✅ (khoảng 1 phút).
 
-Nếu hiện ❌, thường là do `titles.json` hoặc `access.json` sai cú pháp (thiếu dấu phẩy, hoặc thừa dấu phẩy ở dòng cuối). Sửa rồi push lại.
+Nếu hiện ❌, thường là do `titles.json`, `access.json` hoặc một file trong `title_translations/` sai cú pháp (thiếu dấu phẩy, hoặc thừa dấu phẩy ở dòng cuối). Sửa rồi push lại.
 
 ### 6. App tự cập nhật
 
@@ -66,7 +78,8 @@ Người dùng mở lại app (có mạng) là thấy ảnh và tên mới. Ản
 
 ## Việc khác
 
-- **Đổi tên ảnh đã có:** sửa tên trong `titles.json`, rồi làm bước 4.
+- **Đổi tên ảnh đã có:** sửa tên trong `titles.json` (và khoá tương ứng trong `title_translations/*.json`), rồi làm bước 4.
+- **Sửa bản dịch:** sửa file trong `title_translations/`, rồi làm bước 4.
 - **Đổi loại mở khoá:** sửa `access.json`, rồi làm bước 4.
 - **Xoá ảnh:** xoá file trong `images/`, rồi làm bước 4.
 - **Giới hạn GitHub Pages:** repo tối đa khoảng 1 GB (hiện khoảng 380 MB), khoảng 100 GB lượt tải mỗi tháng.

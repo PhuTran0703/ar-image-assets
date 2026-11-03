@@ -1,6 +1,7 @@
 # Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json + loại mở
 # khoá từ access.json + hash nội dung để app nhận ảnh đã sửa + ngày thêm ảnh cho
-# mục "New" trên Home) rồi deploy images/ + legal/ lên GitHub Pages.
+# mục "New" trên Home + hash bản dịch tên) rồi deploy images/ + legal/ +
+# titles/ (bản dịch tên ảnh từ title_translations/) lên GitHub Pages.
 name: Deploy Pages
 
 on:
@@ -88,13 +89,42 @@ jobs:
                   continue
               added[path] = 0 if sha == baseline else ts
           added = {p: ts for p, ts in added.items() if ts}
+          # Bản dịch tên ảnh: title_translations/<code>.json, khoá là tên
+          # tiếng Anh (giá trị trong titles.json). Deploy thành titles/<code>.json;
+          # catalog.json chỉ ghi hash để app chỉ tải lại khi bản dịch đổi.
+          title_i18n = {}
+          os.makedirs('_site/titles', exist_ok=True)
+          english = set(titles.values())
+          if os.path.isdir('title_translations'):
+              for name in sorted(os.listdir('title_translations')):
+                  if not name.endswith('.json'):
+                      continue
+                  code = name[:-5]
+                  with open(os.path.join('title_translations', name),
+                            encoding='utf-8') as f:
+                      raw = json.load(f)
+                  tr = {k: v.strip() for k, v in raw.items()
+                        if isinstance(k, str) and isinstance(v, str)
+                        and v.strip()}
+                  body = json.dumps(tr, ensure_ascii=False, sort_keys=True)
+                  with open(f'_site/titles/{code}.json', 'w',
+                            encoding='utf-8') as f:
+                      f.write(body)
+                  title_i18n[code] = hashlib.sha1(
+                      body.encode('utf-8')).hexdigest()[:10]
+                  missing = sorted(english - set(tr))
+                  print(f'title_translations/{name}: {len(tr)} tên, '
+                        f'thiếu {len(missing)}')
+                  for t in missing[:20]:
+                      print(f'  thiếu bản dịch: {t}')
           with open('_site/catalog.json', 'w', encoding='utf-8') as f:
               json.dump({'version': 1, 'files': files, 'titles': titles,
                          'access': access, 'versions': versions,
-                         'added': added}, f,
+                         'added': added, 'title_i18n': title_i18n}, f,
                         ensure_ascii=False)
           print(f'{len(files)} files, {len(titles)} titles, '
-                f'{len(access)} access, {len(added)} new')
+                f'{len(access)} access, {len(added)} new, '
+                f'{len(title_i18n)} title languages')
           PY
 
       - uses: actions/upload-pages-artifact@v3
