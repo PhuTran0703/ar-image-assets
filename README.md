@@ -55,26 +55,20 @@ Tên trong `titles.json` là tiếng Anh. Bản dịch nằm trong `title_transl
 - Tên chưa dịch thì app hiện tiếng Anh. Log của Action in số tên còn thiếu ở từng ngôn ngữ.
 - App chỉ tải file của ngôn ngữ đang dùng, và chỉ khi file đó thay đổi.
 
-### 3c. Bộ sưu tập (tuỳ chọn)
+### 3c. Icon huy hiệu chủ đề (tuỳ chọn)
 
-Bộ sưu tập là một nhóm ảnh, người dùng vẽ hết thì nhận **huy hiệu** của bộ (hiện ở Profile, kèm màn chúc mừng). Mỗi bộ là một thư mục trong `collections/`:
+Người dùng vẽ xong 10 bức khác nhau của một chủ đề thì nhận huy hiệu "<Chủ đề> Master" (hiện ở Profile, kèm màn chúc mừng). Huy hiệu tự có cho mọi chủ đề, không cần khai báo.
+
+Mặc định icon huy hiệu là ảnh đầu tiên của chủ đề. Muốn icon riêng thì đặt file vào `badges/`, **tên file trùng tên thư mục chủ đề**:
 
 ```
-collections/
-  Halloween/
-    badge.png      ← icon huy hiệu của bộ
-    pumpkin.png
-    ghost.png
-    …              ← ảnh của bộ (nên khoảng 10 ảnh)
+badges/
+  Spooky Halloween.png
+  Animal.png
 ```
 
-- **Tên thư mục là tên bộ** hiện trong app, ví dụ "Halloween". Bộ xếp theo tên.
-- **Icon huy hiệu:** file `badge.png` (hoặc `badge.jpg`, `badge.webp`…). App đặt icon trong vòng tròn vàng, nên dùng ảnh vuông, nền trong suốt, hình nằm giữa. Không có file này thì app dùng ảnh đầu tiên của bộ.
-- Ảnh trong bộ **luôn miễn phí** (không dùng `access.json`) để ai cũng hoàn thành được.
-- Ảnh trong bộ tách riêng với chủ đề trong `images/`. Muốn ảnh vừa ở chủ đề vừa ở bộ thì chép thành 2 bản.
-- **Tên ảnh:** thêm vào `titles.json` như ảnh thường, khoá là path, ví dụ `"collections/Halloween/pumpkin.png": "Smiling Pumpkin"`.
-- **Dịch tên bộ:** thêm vào `title_translations/<mã>.json` với khoá là tên thư mục, ví dụ `"Halloween": "Halloween"`.
-- **Sửa bộ sau khi phát hành:** thêm ảnh vào bộ thì người chưa xong bộ phải vẽ thêm; ai đã nhận huy hiệu rồi vẫn giữ.
+- Dùng ảnh vuông, nền trong suốt, hình nằm giữa. App đặt icon trong vòng tròn vàng.
+- Tên file sai (không trùng chủ đề nào) bị bỏ qua, xem log của Action.
 
 ### 4. Đẩy lên GitHub
 

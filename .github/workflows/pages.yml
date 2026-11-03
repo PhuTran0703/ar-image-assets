@@ -1,8 +1,8 @@
 # Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json + loại mở
 # khoá từ access.json + hash nội dung để app nhận ảnh đã sửa + ngày thêm ảnh cho
 # mục "New" trên Home + hash bản dịch tên + chủ đề ghim "Topic of the Day" từ
-# featured.json + bộ sưu tập từ collections/<Tên bộ>/ (icon huy hiệu là
-# collections/<Tên bộ>/badge.png)) rồi deploy images/ + collections/ + legal/ +
+# featured.json + icon huy hiệu chủ đề từ badges/<Tên chủ đề>.png) rồi deploy
+# images/ + badges/ + legal/ +
 # titles/ (bản dịch tên ảnh từ title_translations/) lên GitHub Pages.
 name: Deploy Pages
 
@@ -36,8 +36,8 @@ jobs:
         run: |
           mkdir _site
           cp -R images _site/images
-          # Bộ sưu tập: collections/<Tên bộ>/*.png, icon huy hiệu badge.png.
-          if [ -d collections ]; then cp -R collections _site/collections; fi
+          # Icon huy hiệu chủ đề (tuỳ chọn): badges/<Tên chủ đề>.png.
+          if [ -d badges ]; then cp -R badges _site/badges; fi
           # Privacy Policy / Terms of Use (13 ngôn ngữ) cho app và store.
           cp -R legal _site/legal
           python3 - <<'PY'
@@ -49,36 +49,23 @@ jobs:
               for name in names
               if name.lower().endswith(exts)
           )
-          # Bộ sưu tập: mỗi thư mục collections/<Tên bộ>/ là một bộ; vẽ xong
-          # cả bộ thì nhận huy hiệu, icon là file badge.<đuôi ảnh> trong thư mục
-          # đó (không có → app dùng ảnh đầu tiên của bộ).
-          collections, collection_files = [], []
-          if os.path.isdir('collections'):
-              for name in sorted(os.listdir('collections'), key=str.lower):
-                  folder = os.path.join('collections', name)
-                  if not os.path.isdir(folder):
+          # Icon huy hiệu chủ đề (tuỳ chọn): badges/<Tên thư mục chủ đề>.<đuôi>.
+          # Chủ đề không có icon → app dùng ảnh đầu tiên của chủ đề.
+          topic_names = {p.split('/')[1] for p in files if p.count('/') == 2}
+          badges = {}
+          if os.path.isdir('badges'):
+              for n in sorted(os.listdir('badges')):
+                  path = f'badges/{n}'
+                  if not (n.lower().endswith(exts) and os.path.isfile(path)):
                       continue
-                  imgs, badge = [], None
-                  for n in sorted(os.listdir(folder)):
-                      path = os.path.join(folder, n).replace(os.sep, '/')
-                      if not (n.lower().endswith(exts) and os.path.isfile(path)):
-                          continue
-                      if os.path.splitext(n)[0].lower() == 'badge':
-                          badge = path
-                      else:
-                          imgs.append(path)
-                  if not imgs:
-                      print(f'collections/{name}: bỏ qua (không có ảnh)')
-                      continue
-                  if not badge:
-                      print(f'collections/{name}: chưa có badge.png, app dùng ảnh đầu tiên')
-                  entry = {'name': name, 'images': imgs}
-                  if badge:
-                      entry['badge'] = badge
-                  collections.append(entry)
-                  collection_files += imgs + ([badge] if badge else [])
-                  print(f'Bộ "{name}": {len(imgs)} ảnh, huy hiệu: {badge or "ảnh đầu tiên"}')
-          all_files = set(files) | set(collection_files)
+                  topic = os.path.splitext(n)[0]
+                  if topic not in topic_names:
+                      print(f'badges: bỏ qua {n}, không có chủ đề "{topic}"')
+                  else:
+                      badges[topic] = path
+          print(f'Icon huy hiệu: {len(badges)} chủ đề '
+                f'({", ".join(sorted(badges)) or "chưa có"})')
+          all_files = set(files)
           titles = {}
           if os.path.exists('titles.json'):
               with open('titles.json', encoding='utf-8') as f:
@@ -100,7 +87,7 @@ jobs:
                   else:
                       access[p] = kind
           versions = {}
-          for p in files + collection_files:
+          for p in files + list(badges.values()):
               with open(p, 'rb') as f:
                   versions[p] = hashlib.sha1(f.read()).hexdigest()[:10]
           # Ngày thêm ảnh (unix giây) từ git: lần "A" gần nhất của path đó.
@@ -128,8 +115,7 @@ jobs:
           # catalog.json chỉ ghi hash để app chỉ tải lại khi bản dịch đổi.
           title_i18n = {}
           os.makedirs('_site/titles', exist_ok=True)
-          # Tên bộ cũng dịch được qua title_translations (khoá = tên thư mục).
-          english = set(titles.values()) | {c['name'] for c in collections}
+          english = set(titles.values())
           if os.path.isdir('title_translations'):
               for name in sorted(os.listdir('title_translations')):
                   if not name.endswith('.json'):
@@ -172,14 +158,14 @@ jobs:
                      'added': added, 'title_i18n': title_i18n}
           if featured:
               catalog['featured'] = featured
-          if collections:
-              catalog['collections'] = collections
+          if badges:
+              catalog['badges'] = badges
           with open('_site/catalog.json', 'w', encoding='utf-8') as f:
               json.dump(catalog, f, ensure_ascii=False)
           print(f'{len(files)} files, {len(titles)} titles, '
                 f'{len(access)} access, {len(added)} new, '
                 f'{len(title_i18n)} title languages, '
-                f'{len(collections)} collections')
+                f'{len(badges)} badge icons')
           PY
 
       - uses: actions/upload-pages-artifact@v3
