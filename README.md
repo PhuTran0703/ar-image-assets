@@ -80,6 +80,15 @@ Người dùng mở lại app (có mạng) là thấy ảnh và tên mới. Ản
 
 - **Đổi tên ảnh đã có:** sửa tên trong `titles.json` (và khoá tương ứng trong `title_translations/*.json`), rồi làm bước 4.
 - **Sửa bản dịch:** sửa file trong `title_translations/`, rồi làm bước 4.
+- **Ghim "Topic of the Day":** ghi tên thư mục chủ đề vào `featured.json`, rồi làm bước 4. App sẽ hiện đúng chủ đề này thay vì random mỗi ngày (ví dụ dịp Halloween):
+
+  ```json
+  {
+    "topic": "Spooky Halloween"
+  }
+  ```
+
+  Tên phải khớp đúng tên thư mục trong `images/` (chữ hoa, khoảng trắng). Sai tên thì Action bỏ qua và in danh sách tên hợp lệ trong log. Muốn quay về random: để `"topic": ""`, rồi làm bước 4. Người dùng thấy thay đổi khi mở lại app (có mạng).
 - **Đổi loại mở khoá:** sửa `access.json`, rồi làm bước 4.
 - **Xoá ảnh:** xoá file trong `images/`, rồi làm bước 4.
 - **Giới hạn GitHub Pages:** repo tối đa khoảng 1 GB (hiện khoảng 380 MB), khoảng 100 GB lượt tải mỗi tháng.
