@@ -29,7 +29,21 @@ Thêm một dòng cho mỗi ảnh vào `titles.json`:
 - Có thể bỏ qua nếu tên file đã có nghĩa: `santa-claus.png` hiện là "Santa Claus".
 - Nếu bỏ qua mà tên file vô nghĩa (ví dụ `Screenshot…`), app hiện tên dạng "Christmas 20".
 
-### 3. Đẩy lên GitHub
+### 3. Đặt loại mở khoá (tuỳ chọn)
+
+Mỗi ảnh thuộc một trong 3 loại, khai báo trong `access.json`:
+
+```json
+"images/Christmas/santa.png": "premium",
+```
+
+- `free`: dùng ngay.
+- `ad`: xem quảng cáo để mở vĩnh viễn (Premium mở luôn).
+- `premium`: chỉ mở khi mua Premium.
+
+Ảnh **không có** trong `access.json` được app tự chia theo vị trí trong chủ đề (40% free / 35% ad / 25% premium, xen kẽ, 2 ảnh đầu free). Giá trị sai hoặc path không tồn tại bị bỏ qua (xem log của Action). Cú pháp giống `titles.json`: dòng cuối không có dấu phẩy.
+
+### 4. Đẩy lên GitHub
 
 ```
 cd ~/Desktop/IMAGE-AR
@@ -40,18 +54,19 @@ git push
 
 Hoặc trên web: **Add file → Upload files**, rồi **Commit changes**.
 
-### 4. Kiểm tra
+### 5. Kiểm tra
 
 Vào [Actions](https://github.com/PhuTran0703/ar-image-assets/actions) và đợi lần chạy mới nhất hiện ✅ (khoảng 1 phút).
 
-Nếu hiện ❌, thường là do `titles.json` sai cú pháp (thiếu dấu phẩy, hoặc thừa dấu phẩy ở dòng cuối). Sửa rồi push lại.
+Nếu hiện ❌, thường là do `titles.json` hoặc `access.json` sai cú pháp (thiếu dấu phẩy, hoặc thừa dấu phẩy ở dòng cuối). Sửa rồi push lại.
 
-### 5. App tự cập nhật
+### 6. App tự cập nhật
 
 Người dùng mở lại app (có mạng) là thấy ảnh và tên mới. Ảnh đã tải trước đó không tải lại; chỉ ảnh mới được tải về.
 
 ## Việc khác
 
-- **Đổi tên ảnh đã có:** sửa tên trong `titles.json`, rồi làm bước 3.
-- **Xoá ảnh:** xoá file trong `images/`, rồi làm bước 3.
+- **Đổi tên ảnh đã có:** sửa tên trong `titles.json`, rồi làm bước 4.
+- **Đổi loại mở khoá:** sửa `access.json`, rồi làm bước 4.
+- **Xoá ảnh:** xoá file trong `images/`, rồi làm bước 4.
 - **Giới hạn GitHub Pages:** repo tối đa khoảng 1 GB (hiện khoảng 380 MB), khoảng 100 GB lượt tải mỗi tháng.

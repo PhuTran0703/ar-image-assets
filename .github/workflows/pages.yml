@@ -1,6 +1,6 @@
-# Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json + hash nội
-# dung để app nhận ảnh đã sửa + ngày thêm ảnh cho mục "New" trên Home) rồi deploy
-# images/ + legal/ lên GitHub Pages.
+# Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json + loại mở
+# khoá từ access.json + hash nội dung để app nhận ảnh đã sửa + ngày thêm ảnh cho
+# mục "New" trên Home) rồi deploy images/ + legal/ lên GitHub Pages.
 name: Deploy Pages
 
 on:
@@ -50,6 +50,20 @@ jobs:
                   raw = json.load(f)
               titles = {p: t.strip() for p, t in raw.items()
                         if p in set(files) and isinstance(t, str) and t.strip()}
+          # Loại mở khoá: free / ad (xem quảng cáo) / premium. Ảnh không có ở
+          # đây được app tự chia theo vị trí trong chủ đề.
+          access = {}
+          if os.path.exists('access.json'):
+              with open('access.json', encoding='utf-8') as f:
+                  raw = json.load(f)
+              for p, kind in raw.items():
+                  kind = kind.strip().lower() if isinstance(kind, str) else ''
+                  if p not in set(files):
+                      print(f'access.json: bỏ qua (không có ảnh): {p}')
+                  elif kind not in ('free', 'ad', 'premium'):
+                      print(f'access.json: bỏ qua (giá trị sai "{kind}"): {p}')
+                  else:
+                      access[p] = kind
           versions = {}
           for p in files:
               with open(p, 'rb') as f:
@@ -76,9 +90,11 @@ jobs:
           added = {p: ts for p, ts in added.items() if ts}
           with open('_site/catalog.json', 'w', encoding='utf-8') as f:
               json.dump({'version': 1, 'files': files, 'titles': titles,
-                         'versions': versions, 'added': added}, f,
+                         'access': access, 'versions': versions,
+                         'added': added}, f,
                         ensure_ascii=False)
-          print(f'{len(files)} files, {len(titles)} titles, {len(added)} new')
+          print(f'{len(files)} files, {len(titles)} titles, '
+                f'{len(access)} access, {len(added)} new')
           PY
 
       - uses: actions/upload-pages-artifact@v3
