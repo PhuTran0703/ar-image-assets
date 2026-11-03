@@ -1,7 +1,8 @@
 # Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json + loại mở
 # khoá từ access.json + hash nội dung để app nhận ảnh đã sửa + ngày thêm ảnh cho
 # mục "New" trên Home + hash bản dịch tên + chủ đề ghim "Topic of the Day" từ
-# featured.json) rồi deploy images/ + legal/ +
+# featured.json + bộ sưu tập từ collections/<Tên bộ>/ (ảnh thưởng trong
+# collections/<Tên bộ>/reward/)) rồi deploy images/ + collections/ + legal/ +
 # titles/ (bản dịch tên ảnh từ title_translations/) lên GitHub Pages.
 name: Deploy Pages
 
@@ -35,6 +36,8 @@ jobs:
         run: |
           mkdir _site
           cp -R images _site/images
+          # Bộ sưu tập: collections/<Tên bộ>/*.png, ảnh thưởng ở reward/.
+          if [ -d collections ]; then cp -R collections _site/collections; fi
           # Privacy Policy / Terms of Use (13 ngôn ngữ) cho app và store.
           cp -R legal _site/legal
           python3 - <<'PY'
@@ -46,12 +49,40 @@ jobs:
               for name in names
               if name.lower().endswith(exts)
           )
+          # Bộ sưu tập: mỗi thư mục collections/<Tên bộ>/ là một bộ; ảnh
+          # thưởng (mở khi vẽ xong cả bộ) nằm trong collections/<Tên bộ>/reward/.
+          collections, collection_files = [], []
+          if os.path.isdir('collections'):
+              for name in sorted(os.listdir('collections'), key=str.lower):
+                  folder = os.path.join('collections', name)
+                  if not os.path.isdir(folder):
+                      continue
+                  def list_images(d):
+                      if not os.path.isdir(d):
+                          return []
+                      return sorted(
+                          os.path.join(d, n).replace(os.sep, '/')
+                          for n in os.listdir(d)
+                          if n.lower().endswith(exts)
+                          and os.path.isfile(os.path.join(d, n)))
+                  imgs = list_images(folder)
+                  reward = list_images(os.path.join(folder, 'reward'))
+                  if not imgs:
+                      print(f'collections/{name}: bỏ qua (không có ảnh)')
+                      continue
+                  if not reward:
+                      print(f'collections/{name}: chưa có ảnh thưởng trong reward/')
+                  collections.append(
+                      {'name': name, 'images': imgs, 'reward': reward})
+                  collection_files += imgs + reward
+                  print(f'Bộ "{name}": {len(imgs)} ảnh, {len(reward)} ảnh thưởng')
+          all_files = set(files) | set(collection_files)
           titles = {}
           if os.path.exists('titles.json'):
               with open('titles.json', encoding='utf-8') as f:
                   raw = json.load(f)
               titles = {p: t.strip() for p, t in raw.items()
-                        if p in set(files) and isinstance(t, str) and t.strip()}
+                        if p in all_files and isinstance(t, str) and t.strip()}
           # Loại mở khoá: free / ad (xem quảng cáo) / premium. Ảnh không có ở
           # đây được app tự chia theo vị trí trong chủ đề.
           access = {}
@@ -67,7 +98,7 @@ jobs:
                   else:
                       access[p] = kind
           versions = {}
-          for p in files:
+          for p in files + collection_files:
               with open(p, 'rb') as f:
                   versions[p] = hashlib.sha1(f.read()).hexdigest()[:10]
           # Ngày thêm ảnh (unix giây) từ git: lần "A" gần nhất của path đó.
@@ -95,7 +126,8 @@ jobs:
           # catalog.json chỉ ghi hash để app chỉ tải lại khi bản dịch đổi.
           title_i18n = {}
           os.makedirs('_site/titles', exist_ok=True)
-          english = set(titles.values())
+          # Tên bộ cũng dịch được qua title_translations (khoá = tên thư mục).
+          english = set(titles.values()) | {c['name'] for c in collections}
           if os.path.isdir('title_translations'):
               for name in sorted(os.listdir('title_translations')):
                   if not name.endswith('.json'):
@@ -138,11 +170,14 @@ jobs:
                      'added': added, 'title_i18n': title_i18n}
           if featured:
               catalog['featured'] = featured
+          if collections:
+              catalog['collections'] = collections
           with open('_site/catalog.json', 'w', encoding='utf-8') as f:
               json.dump(catalog, f, ensure_ascii=False)
           print(f'{len(files)} files, {len(titles)} titles, '
                 f'{len(access)} access, {len(added)} new, '
-                f'{len(title_i18n)} title languages')
+                f'{len(title_i18n)} title languages, '
+                f'{len(collections)} collections')
           PY
 
       - uses: actions/upload-pages-artifact@v3

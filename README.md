@@ -55,6 +55,28 @@ Tên trong `titles.json` là tiếng Anh. Bản dịch nằm trong `title_transl
 - Tên chưa dịch thì app hiện tiếng Anh. Log của Action in số tên còn thiếu ở từng ngôn ngữ.
 - App chỉ tải file của ngôn ngữ đang dùng, và chỉ khi file đó thay đổi.
 
+### 3c. Bộ sưu tập (tuỳ chọn)
+
+Bộ sưu tập là một nhóm ảnh người dùng vẽ hết thì được thưởng: mở khoá **ảnh thưởng độc quyền** và nhận **huy hiệu** ở Profile. Mỗi bộ là một thư mục trong `collections/`:
+
+```
+collections/
+  Halloween/
+    pumpkin.png
+    ghost.png
+    …              ← ảnh của bộ (nên khoảng 10 ảnh)
+    reward/
+      golden-witch.png   ← ảnh thưởng, mở khi vẽ xong cả bộ
+```
+
+- **Tên thư mục là tên bộ** hiện trong app, ví dụ "Halloween". Bộ xếp theo tên.
+- Ảnh trong bộ **luôn miễn phí** (không dùng `access.json`) để ai cũng hoàn thành được.
+- Ảnh thưởng chỉ mở khi vẽ xong mọi ảnh trong bộ, kể cả với Premium. Có thể để nhiều ảnh trong `reward/`.
+- Ảnh trong bộ tách riêng với chủ đề trong `images/`. Muốn ảnh vừa ở chủ đề vừa ở bộ thì chép thành 2 bản.
+- **Tên ảnh:** thêm vào `titles.json` như ảnh thường, khoá là path, ví dụ `"collections/Halloween/pumpkin.png": "Smiling Pumpkin"`.
+- **Dịch tên bộ:** thêm vào `title_translations/<mã>.json` với khoá là tên thư mục, ví dụ `"Halloween": "Halloween"`.
+- **Sửa bộ sau khi phát hành:** thêm ảnh vào bộ thì người chưa xong bộ phải vẽ thêm; ai đã hoàn thành rồi vẫn giữ phần thưởng.
+
 ### 4. Đẩy lên GitHub
 
 ```
