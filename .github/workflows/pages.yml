@@ -1,8 +1,8 @@
 # Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json + loại mở
 # khoá từ access.json + hash nội dung để app nhận ảnh đã sửa + ngày thêm ảnh cho
 # mục "New" trên Home + hash bản dịch tên + chủ đề ghim "Topic of the Day" từ
-# featured.json + bộ sưu tập từ collections/<Tên bộ>/ (ảnh thưởng trong
-# collections/<Tên bộ>/reward/)) rồi deploy images/ + collections/ + legal/ +
+# featured.json + bộ sưu tập từ collections/<Tên bộ>/ (icon huy hiệu là
+# collections/<Tên bộ>/badge.png)) rồi deploy images/ + collections/ + legal/ +
 # titles/ (bản dịch tên ảnh từ title_translations/) lên GitHub Pages.
 name: Deploy Pages
 
@@ -36,7 +36,7 @@ jobs:
         run: |
           mkdir _site
           cp -R images _site/images
-          # Bộ sưu tập: collections/<Tên bộ>/*.png, ảnh thưởng ở reward/.
+          # Bộ sưu tập: collections/<Tên bộ>/*.png, icon huy hiệu badge.png.
           if [ -d collections ]; then cp -R collections _site/collections; fi
           # Privacy Policy / Terms of Use (13 ngôn ngữ) cho app và store.
           cp -R legal _site/legal
@@ -49,33 +49,35 @@ jobs:
               for name in names
               if name.lower().endswith(exts)
           )
-          # Bộ sưu tập: mỗi thư mục collections/<Tên bộ>/ là một bộ; ảnh
-          # thưởng (mở khi vẽ xong cả bộ) nằm trong collections/<Tên bộ>/reward/.
+          # Bộ sưu tập: mỗi thư mục collections/<Tên bộ>/ là một bộ; vẽ xong
+          # cả bộ thì nhận huy hiệu, icon là file badge.<đuôi ảnh> trong thư mục
+          # đó (không có → app dùng ảnh đầu tiên của bộ).
           collections, collection_files = [], []
           if os.path.isdir('collections'):
               for name in sorted(os.listdir('collections'), key=str.lower):
                   folder = os.path.join('collections', name)
                   if not os.path.isdir(folder):
                       continue
-                  def list_images(d):
-                      if not os.path.isdir(d):
-                          return []
-                      return sorted(
-                          os.path.join(d, n).replace(os.sep, '/')
-                          for n in os.listdir(d)
-                          if n.lower().endswith(exts)
-                          and os.path.isfile(os.path.join(d, n)))
-                  imgs = list_images(folder)
-                  reward = list_images(os.path.join(folder, 'reward'))
+                  imgs, badge = [], None
+                  for n in sorted(os.listdir(folder)):
+                      path = os.path.join(folder, n).replace(os.sep, '/')
+                      if not (n.lower().endswith(exts) and os.path.isfile(path)):
+                          continue
+                      if os.path.splitext(n)[0].lower() == 'badge':
+                          badge = path
+                      else:
+                          imgs.append(path)
                   if not imgs:
                       print(f'collections/{name}: bỏ qua (không có ảnh)')
                       continue
-                  if not reward:
-                      print(f'collections/{name}: chưa có ảnh thưởng trong reward/')
-                  collections.append(
-                      {'name': name, 'images': imgs, 'reward': reward})
-                  collection_files += imgs + reward
-                  print(f'Bộ "{name}": {len(imgs)} ảnh, {len(reward)} ảnh thưởng')
+                  if not badge:
+                      print(f'collections/{name}: chưa có badge.png, app dùng ảnh đầu tiên')
+                  entry = {'name': name, 'images': imgs}
+                  if badge:
+                      entry['badge'] = badge
+                  collections.append(entry)
+                  collection_files += imgs + ([badge] if badge else [])
+                  print(f'Bộ "{name}": {len(imgs)} ảnh, huy hiệu: {badge or "ảnh đầu tiên"}')
           all_files = set(files) | set(collection_files)
           titles = {}
           if os.path.exists('titles.json'):

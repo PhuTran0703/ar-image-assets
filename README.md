@@ -57,25 +57,24 @@ Tên trong `titles.json` là tiếng Anh. Bản dịch nằm trong `title_transl
 
 ### 3c. Bộ sưu tập (tuỳ chọn)
 
-Bộ sưu tập là một nhóm ảnh người dùng vẽ hết thì được thưởng: mở khoá **ảnh thưởng độc quyền** và nhận **huy hiệu** ở Profile. Mỗi bộ là một thư mục trong `collections/`:
+Bộ sưu tập là một nhóm ảnh, người dùng vẽ hết thì nhận **huy hiệu** của bộ (hiện ở Profile, kèm màn chúc mừng). Mỗi bộ là một thư mục trong `collections/`:
 
 ```
 collections/
   Halloween/
+    badge.png      ← icon huy hiệu của bộ
     pumpkin.png
     ghost.png
     …              ← ảnh của bộ (nên khoảng 10 ảnh)
-    reward/
-      golden-witch.png   ← ảnh thưởng, mở khi vẽ xong cả bộ
 ```
 
 - **Tên thư mục là tên bộ** hiện trong app, ví dụ "Halloween". Bộ xếp theo tên.
+- **Icon huy hiệu:** file `badge.png` (hoặc `badge.jpg`, `badge.webp`…). App đặt icon trong vòng tròn vàng, nên dùng ảnh vuông, nền trong suốt, hình nằm giữa. Không có file này thì app dùng ảnh đầu tiên của bộ.
 - Ảnh trong bộ **luôn miễn phí** (không dùng `access.json`) để ai cũng hoàn thành được.
-- Ảnh thưởng chỉ mở khi vẽ xong mọi ảnh trong bộ, kể cả với Premium. Có thể để nhiều ảnh trong `reward/`.
 - Ảnh trong bộ tách riêng với chủ đề trong `images/`. Muốn ảnh vừa ở chủ đề vừa ở bộ thì chép thành 2 bản.
 - **Tên ảnh:** thêm vào `titles.json` như ảnh thường, khoá là path, ví dụ `"collections/Halloween/pumpkin.png": "Smiling Pumpkin"`.
 - **Dịch tên bộ:** thêm vào `title_translations/<mã>.json` với khoá là tên thư mục, ví dụ `"Halloween": "Halloween"`.
-- **Sửa bộ sau khi phát hành:** thêm ảnh vào bộ thì người chưa xong bộ phải vẽ thêm; ai đã hoàn thành rồi vẫn giữ phần thưởng.
+- **Sửa bộ sau khi phát hành:** thêm ảnh vào bộ thì người chưa xong bộ phải vẽ thêm; ai đã nhận huy hiệu rồi vẫn giữ.
 
 ### 4. Đẩy lên GitHub
 
