@@ -1,8 +1,8 @@
 # Mỗi lần push: tạo catalog.json (danh sách ảnh + tên từ titles.json + loại mở
 # khoá từ access.json + hash nội dung để app nhận ảnh đã sửa + ngày thêm ảnh cho
 # mục "New" trên Home + hash bản dịch tên + chủ đề ghim "Topic of the Day" từ
-# featured.json + icon huy hiệu chủ đề từ badges/<Tên chủ đề>.png) rồi deploy
-# images/ + badges/ + legal/ +
+# featured.json + bộ sưu tập từ sets/<id>/set.json) rồi deploy
+# images/ + sets/ (icon huy hiệu riêng, tuỳ chọn) + legal/ +
 # titles/ (bản dịch tên ảnh từ title_translations/) lên GitHub Pages.
 name: Deploy Pages
 
@@ -36,8 +36,8 @@ jobs:
         run: |
           mkdir _site
           cp -R images _site/images
-          # Icon huy hiệu chủ đề (tuỳ chọn): badges/<Tên chủ đề>.png.
-          if [ -d badges ]; then cp -R badges _site/badges; fi
+          # Bộ sưu tập: sets/<id>/set.json (+ badge.png tuỳ chọn).
+          if [ -d sets ]; then cp -R sets _site/sets; fi
           # Privacy Policy / Terms of Use (13 ngôn ngữ) cho app và store.
           cp -R legal _site/legal
           python3 - <<'PY'
@@ -49,22 +49,67 @@ jobs:
               for name in names
               if name.lower().endswith(exts)
           )
-          # Icon huy hiệu chủ đề (tuỳ chọn): badges/<Tên thư mục chủ đề>.<đuôi>.
-          # Chủ đề không có icon → app dùng ảnh đầu tiên của chủ đề.
-          topic_names = {p.split('/')[1] for p in files if p.count('/') == 2}
-          badges = {}
-          if os.path.isdir('badges'):
-              for n in sorted(os.listdir('badges')):
-                  path = f'badges/{n}'
-                  if not (n.lower().endswith(exts) and os.path.isfile(path)):
+          # Bộ sưu tập: mỗi thư mục sets/<id>/ có set.json (tên, mô tả theo
+          # ngôn ngữ, kiểu huy hiệu, from/until tuỳ chọn, danh sách ảnh có sẵn
+          # trong images/) và badge.png tuỳ chọn (icon riêng thay cho huy hiệu
+          # app tự vẽ). Ảnh không tồn tại bị bỏ qua; bộ không còn ảnh nào bị bỏ.
+          import datetime, re
+          file_set = set(files)
+          sets, set_icons = [], []
+          if os.path.isdir('sets'):
+              for sid in sorted(os.listdir('sets')):
+                  folder = f'sets/{sid}'
+                  spec_path = f'{folder}/set.json'
+                  if not os.path.isfile(spec_path):
                       continue
-                  topic = os.path.splitext(n)[0]
-                  if topic not in topic_names:
-                      print(f'badges: bỏ qua {n}, không có chủ đề "{topic}"')
-                  else:
-                      badges[topic] = path
-          print(f'Icon huy hiệu: {len(badges)} chủ đề '
-                f'({", ".join(sorted(badges)) or "chưa có"})')
+                  try:
+                      with open(spec_path, encoding='utf-8') as f:
+                          spec = json.load(f)
+                  except ValueError as e:
+                      raise SystemExit(f'{spec_path}: JSON sai cú pháp: {e}')
+                  images = []
+                  for p in spec.get('images', []):
+                      if p in file_set and p not in images:
+                          images.append(p)
+                      else:
+                          print(f'{spec_path}: bỏ qua ảnh không có/trùng: {p}')
+                  name = spec.get('name')
+                  if isinstance(name, str):
+                      name = {'en': name}
+                  if not images or not isinstance(name, dict) or not name.get('en'):
+                      print(f'{spec_path}: bỏ qua bộ (thiếu ảnh hoặc name.en)')
+                      continue
+                  entry = {'id': sid, 'name': name, 'images': images,
+                           'order': spec.get('order', 999)}
+                  desc = spec.get('description')
+                  if isinstance(desc, str):
+                      desc = {'en': desc}
+                  if isinstance(desc, dict):
+                      entry['description'] = desc
+                  if isinstance(spec.get('badge'), dict):
+                      entry['badge'] = spec['badge']
+                  for key in ('from', 'until'):
+                      value = spec.get(key)
+                      if not value:
+                          continue
+                      try:
+                          datetime.date.fromisoformat(value)
+                          entry[key] = value
+                      except (TypeError, ValueError):
+                          print(f'{spec_path}: bỏ qua {key} sai định dạng '
+                                f'(cần YYYY-MM-DD): {value}')
+                  for n in sorted(os.listdir(folder)):
+                      if re.fullmatch(r'badge\.(png|jpe?g|webp)', n.lower()):
+                          entry['icon'] = f'{folder}/{n}'
+                          set_icons.append(entry['icon'])
+                          break
+                  sets.append(entry)
+          sets.sort(key=lambda e: (e['order'], e['id']))
+          for e in sets:
+              print(f"Bộ {e['id']}: {len(e['images'])} ảnh"
+                    + (f", {e.get('from', '…')} → {e.get('until', '…')}"
+                       if 'from' in e or 'until' in e else '')
+                    + (', có icon riêng' if 'icon' in e else ''))
           all_files = set(files)
           titles = {}
           if os.path.exists('titles.json'):
@@ -87,7 +132,7 @@ jobs:
                   else:
                       access[p] = kind
           versions = {}
-          for p in files + list(badges.values()):
+          for p in files + set_icons:
               with open(p, 'rb') as f:
                   versions[p] = hashlib.sha1(f.read()).hexdigest()[:10]
           # Ngày thêm ảnh (unix giây) từ git: lần "A" gần nhất của path đó.
@@ -158,14 +203,14 @@ jobs:
                      'added': added, 'title_i18n': title_i18n}
           if featured:
               catalog['featured'] = featured
-          if badges:
-              catalog['badges'] = badges
+          if sets:
+              catalog['sets'] = sets
           with open('_site/catalog.json', 'w', encoding='utf-8') as f:
               json.dump(catalog, f, ensure_ascii=False)
           print(f'{len(files)} files, {len(titles)} titles, '
                 f'{len(access)} access, {len(added)} new, '
                 f'{len(title_i18n)} title languages, '
-                f'{len(badges)} badge icons')
+                f'{len(sets)} sets')
           PY
 
       - uses: actions/upload-pages-artifact@v3

@@ -1,0 +1,53 @@
+{
+  "order": 4,
+  "name": {
+    "en": "Princess Kingdom",
+    "vi": "Vương quốc Công chúa",
+    "ja": "プリンセス王国",
+    "es": "Reino de princesas",
+    "pt_BR": "Reino das princesas",
+    "zh_Hans": "公主王国",
+    "zh_Hant": "公主王國",
+    "ko": "공주 왕국",
+    "fr": "Royaume des princesses",
+    "de": "Prinzessinnenreich",
+    "id": "Kerajaan Putri",
+    "th": "อาณาจักรเจ้าหญิง",
+    "ar": "مملكة الأميرات"
+  },
+  "description": {
+    "en": "10 princesses with gowns, crowns and magic.",
+    "vi": "10 nàng công chúa với váy, vương miện và phép màu.",
+    "ja": "ドレスと王冠と魔法のプリンセス10人。",
+    "es": "10 princesas con vestidos, coronas y magia.",
+    "pt_BR": "10 princesas com vestidos, coroas e magia.",
+    "zh_Hans": "10位身穿礼服、头戴王冠的魔法公主。",
+    "zh_Hant": "10位身穿禮服、頭戴王冠的魔法公主。",
+    "ko": "드레스와 왕관, 마법의 공주 10명.",
+    "fr": "10 princesses, robes, couronnes et magie.",
+    "de": "10 Prinzessinnen mit Kleidern, Kronen und Magie.",
+    "id": "10 putri dengan gaun, mahkota, dan sihir.",
+    "th": "เจ้าหญิง 10 องค์กับชุดราตรี มงกุฎ และเวทมนตร์",
+    "ar": "10 أميرات بالفساتين والتيجان والسحر."
+  },
+  "badge": {
+    "emoji": "👑",
+    "shape": "heart",
+    "colors": [
+      "#F98BD0",
+      "#C2409B"
+    ]
+  },
+  "images": [
+    "images/Princess/Screenshot 2026-10-31 at 10.40.29.png",
+    "images/Princess/Screenshot 2026-10-31 at 10.43.08.png",
+    "images/Princess/Screenshot 2026-10-31 at 10.43.03.png",
+    "images/Princess/Screenshot 2026-10-31 at 10.35.15.png",
+    "images/Princess/Screenshot 2026-10-31 at 10.42.59.png",
+    "images/Princess/Screenshot 2026-10-31 at 10.40.56.png",
+    "images/Princess/Screenshot 2026-10-31 at 10.37.51.png",
+    "images/Princess/Screenshot 2026-10-31 at 10.42.13.png",
+    "images/Princess/Screenshot 2026-10-31 at 10.43.48.png",
+    "images/Princess/Screenshot 2026-10-31 at 10.43.58.png"
+  ]
+}

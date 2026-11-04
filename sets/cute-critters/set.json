@@ -1,0 +1,53 @@
+{
+  "order": 3,
+  "name": {
+    "en": "Cute Critters",
+    "vi": "Thú cưng đáng yêu",
+    "ja": "かわいい動物たち",
+    "es": "Animalitos adorables",
+    "pt_BR": "Bichinhos fofos",
+    "zh_Hans": "萌萌小动物",
+    "zh_Hant": "萌萌小動物",
+    "ko": "귀여운 동물 친구들",
+    "fr": "Adorables bestioles",
+    "de": "Süße Tierchen",
+    "id": "Hewan Lucu",
+    "th": "สัตว์น้อยน่ารัก",
+    "ar": "حيوانات لطيفة"
+  },
+  "description": {
+    "en": "10 adorable animals that are easy to draw.",
+    "vi": "10 bạn thú dễ thương, dễ vẽ.",
+    "ja": "描きやすい、かわいい動物10匹。",
+    "es": "10 animales adorables y fáciles de dibujar.",
+    "pt_BR": "10 animais adoráveis e fáceis de desenhar.",
+    "zh_Hans": "10只好画又可爱的小动物。",
+    "zh_Hant": "10隻好畫又可愛的小動物。",
+    "ko": "그리기 쉬운 사랑스러운 동물 10마리.",
+    "fr": "10 animaux adorables et faciles à dessiner.",
+    "de": "10 niedliche Tiere, die leicht zu zeichnen sind.",
+    "id": "10 hewan menggemaskan yang mudah digambar.",
+    "th": "สัตว์น่ารัก 10 ตัวที่วาดง่าย",
+    "ar": "10 حيوانات لطيفة وسهلة الرسم."
+  },
+  "badge": {
+    "emoji": "🐾",
+    "shape": "flower",
+    "colors": [
+      "#FFB37A",
+      "#F2742B"
+    ]
+  },
+  "images": [
+    "images/Animal/Screenshot 2026-10-31 at 11.14.52.png",
+    "images/Animal/Screenshot 2026-10-31 at 11.19.34.png",
+    "images/Cute/zngndzifp6utqamhqj6i.png",
+    "images/Cute/kcwditid0iulv3snlot4.png",
+    "images/Cute/ny2hocgghxtxfhugru0a.png",
+    "images/Animal/Screenshot 2026-10-31 at 11.19.44.png",
+    "images/Animal/Screenshot 2026-10-31 at 11.23.08.png",
+    "images/Animal/Screenshot 2026-10-31 at 11.19.01.png",
+    "images/Animal/Screenshot 2026-10-31 at 11.23.38.png",
+    "images/Animal/Screenshot 2026-10-31 at 11.23.52.png"
+  ]
+}

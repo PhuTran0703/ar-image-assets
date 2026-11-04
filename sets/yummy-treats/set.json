@@ -1,0 +1,53 @@
+{
+  "order": 6,
+  "name": {
+    "en": "Yummy Treats",
+    "vi": "Món ngon ngọt ngào",
+    "ja": "おいしいおやつ",
+    "es": "Delicias",
+    "pt_BR": "Gostosuras",
+    "zh_Hans": "美味小食",
+    "zh_Hant": "美味小食",
+    "ko": "맛있는 간식",
+    "fr": "Gourmandises",
+    "de": "Leckereien",
+    "id": "Camilan Lezat",
+    "th": "ขนมแสนอร่อย",
+    "ar": "حلويات لذيذة"
+  },
+  "description": {
+    "en": "10 smiling snacks, fruits and desserts.",
+    "vi": "10 món ăn vặt, trái cây và tráng miệng tươi cười.",
+    "ja": "にっこり笑顔のおやつ・フルーツ・デザート10品。",
+    "es": "10 tentempiés, frutas y postres sonrientes.",
+    "pt_BR": "10 lanches, frutas e sobremesas sorridentes.",
+    "zh_Hans": "10款笑眯眯的零食、水果和甜点。",
+    "zh_Hant": "10款笑瞇瞇的零食、水果和甜點。",
+    "ko": "웃는 간식, 과일, 디저트 10가지.",
+    "fr": "10 en-cas, fruits et desserts souriants.",
+    "de": "10 lächelnde Snacks, Früchte und Desserts.",
+    "id": "10 camilan, buah, dan hidangan penutup yang tersenyum.",
+    "th": "ขนม ผลไม้ และของหวานยิ้มแย้ม 10 อย่าง",
+    "ar": "10 وجبات خفيفة وفواكه وحلويات مبتسمة."
+  },
+  "badge": {
+    "emoji": "🍩",
+    "shape": "hexagon",
+    "colors": [
+      "#FFD166",
+      "#F59E0B"
+    ]
+  },
+  "images": [
+    "images/Food/kdsfn2u0nkdikxgsm85n.png",
+    "images/Food/Screenshot 2026-10-31 at 21.40.22.png",
+    "images/Food/Screenshot 2026-10-31 at 21.40.07.png",
+    "images/Food/Screenshot 2026-10-31 at 21.39.42.png",
+    "images/Food/uuekqaarzc1dtz4eybek.png",
+    "images/Food/c2yfiozmcma5dlk40rqw.png",
+    "images/Food/uno94vulduvtojgzx87y.png",
+    "images/Food/c9ierrhmsoxtpfexxq4q.png",
+    "images/Food/yoiwtz9d1tcwsszjlenq.png",
+    "images/Food/jxh6bpfwleaghtciqwsj.png"
+  ]
+}

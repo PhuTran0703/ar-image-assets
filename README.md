@@ -55,20 +55,46 @@ Tên trong `titles.json` là tiếng Anh. Bản dịch nằm trong `title_transl
 - Tên chưa dịch thì app hiện tiếng Anh. Log của Action in số tên còn thiếu ở từng ngôn ngữ.
 - App chỉ tải file của ngôn ngữ đang dùng, và chỉ khi file đó thay đổi.
 
-### 3c. Icon huy hiệu chủ đề (tuỳ chọn)
+### 3c. Bộ sưu tập (sets/)
 
-Người dùng vẽ xong 10 bức khác nhau của một chủ đề thì nhận huy hiệu "<Chủ đề> Master" (hiện ở Profile, kèm màn chúc mừng). Huy hiệu tự có cho mọi chủ đề, không cần khai báo.
-
-Mặc định icon huy hiệu là ảnh đầu tiên của chủ đề. Muốn icon riêng thì đặt file vào `badges/`, **tên file trùng tên thư mục chủ đề**:
+Mỗi bộ là một thư mục trong `sets/`. Người dùng vẽ xong **tất cả** ảnh của bộ thì nhận huy hiệu của bộ (hiện ở Home, Profile, kèm màn chúc mừng có hiệu ứng). Thêm hoặc sửa bộ chỉ cần push, không phải ra bản app mới.
 
 ```
-badges/
-  Spooky Halloween.png
-  Animal.png
+sets/
+  christmas-countdown/
+    set.json
+    badge.png        (tuỳ chọn)
+  first-steps/
+    set.json
 ```
 
-- Dùng ảnh vuông, nền trong suốt, hình nằm giữa. App đặt icon trong vòng tròn vàng.
-- Tên file sai (không trùng chủ đề nào) bị bỏ qua, xem log của Action.
+`set.json`:
+
+```json
+{
+  "order": 1,
+  "name": { "en": "Christmas Countdown", "vi": "Đếm ngược Giáng sinh" },
+  "description": { "en": "10 festive pictures to draw before Christmas.", "vi": "10 bức vẽ rộn ràng đón Giáng sinh." },
+  "badge": { "emoji": "🎄", "shape": "star", "colors": ["#FF5A5F", "#C81D3A"] },
+  "from": "2026-11-01",
+  "until": "2027-01-10",
+  "images": [
+    "images/Christmas/....png",
+    "images/Christmas/....png"
+  ]
+}
+```
+
+- **Tên thư mục** là id của bộ. Đã phát hành thì đừng đổi tên, vì tiến độ của người dùng gắn với id này.
+- **images**: path ảnh đã có trong `images/` (copy đúng khoá trong `titles.json`). Ảnh có thể lấy từ nhiều chủ đề khác nhau, nên làm được bộ trộn như "First Steps". Nên để khoảng 10 ảnh. Path sai bị bỏ qua, xem log Action.
+- **name / description**: theo mã ngôn ngữ (`en`, `vi`, `ja`, `es`, `pt_BR`, `zh_Hans`, `zh_Hant`, `ko`, `fr`, `de`, `id`, `th`, `ar`). Bắt buộc có `en`; ngôn ngữ thiếu thì app hiện tiếng Anh.
+- **badge**: app tự vẽ huy hiệu.
+  - `emoji`: hình ở giữa huy hiệu.
+  - `shape`: một trong `circle`, `star`, `flower`, `heart`, `shield`, `hexagon`.
+  - `colors`: 2 màu, sáng trước, đậm sau.
+  - Muốn dùng ảnh riêng thì đặt `badge.png` (vuông, nền trong suốt) vào thư mục bộ.
+- **from / until** (tuỳ chọn, `YYYY-MM-DD`): bộ theo mùa chỉ hiện trong khoảng này, ví dụ Giáng sinh, Tết, Valentine. Hết hạn thì bộ ẩn đi, nhưng ai đã đạt huy hiệu vẫn giữ.
+- **order**: thứ tự hiện trên Home, số nhỏ lên trước.
 
 ### 4. Đẩy lên GitHub
 
@@ -85,7 +111,7 @@ Hoặc trên web: **Add file → Upload files**, rồi **Commit changes**.
 
 Vào [Actions](https://github.com/PhuTran0703/ar-image-assets/actions) và đợi lần chạy mới nhất hiện ✅ (khoảng 1 phút).
 
-Nếu hiện ❌, thường là do `titles.json`, `access.json` hoặc một file trong `title_translations/` sai cú pháp (thiếu dấu phẩy, hoặc thừa dấu phẩy ở dòng cuối). Sửa rồi push lại.
+Nếu hiện ❌, thường là do `titles.json`, `access.json`, một file trong `title_translations/` hoặc một `sets/*/set.json` sai cú pháp (thiếu dấu phẩy, hoặc thừa dấu phẩy ở dòng cuối). Sửa rồi push lại.
 
 ### 6. App tự cập nhật
 

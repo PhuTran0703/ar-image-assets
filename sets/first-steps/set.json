@@ -1,0 +1,53 @@
+{
+  "order": 2,
+  "name": {
+    "en": "First Steps",
+    "vi": "Những nét đầu tiên",
+    "ja": "はじめの一歩",
+    "es": "Primeros pasos",
+    "pt_BR": "Primeiros passos",
+    "zh_Hans": "新手起步",
+    "zh_Hant": "新手起步",
+    "ko": "첫걸음",
+    "fr": "Premiers pas",
+    "de": "Erste Schritte",
+    "id": "Langkah Pertama",
+    "th": "ก้าวแรก",
+    "ar": "الخطوات الأولى"
+  },
+  "description": {
+    "en": "The 10 easiest pictures, perfect for getting started.",
+    "vi": "10 bức dễ nhất, hợp để bắt đầu.",
+    "ja": "いちばん簡単な10枚。はじめての方にぴったり。",
+    "es": "Los 10 dibujos más fáciles, ideales para empezar.",
+    "pt_BR": "Os 10 desenhos mais fáceis, perfeitos para começar.",
+    "zh_Hans": "最简单的10幅画，非常适合入门。",
+    "zh_Hant": "最簡單的10幅畫，非常適合入門。",
+    "ko": "가장 쉬운 10가지 그림, 시작하기에 딱이에요.",
+    "fr": "Les 10 dessins les plus faciles, parfaits pour débuter.",
+    "de": "Die 10 einfachsten Bilder, ideal für den Anfang.",
+    "id": "10 gambar termudah, cocok untuk pemula.",
+    "th": "10 ภาพที่ง่ายที่สุด เหมาะสำหรับเริ่มต้น",
+    "ar": "أسهل 10 رسومات، مثالية للبداية."
+  },
+  "badge": {
+    "emoji": "✏️",
+    "shape": "circle",
+    "colors": [
+      "#34D399",
+      "#0F9F6E"
+    ]
+  },
+  "images": [
+    "images/Food/qhn3ky2wjztuadx1avxz.png",
+    "images/Flower/fyxka1bibocbvnpglkqi.png",
+    "images/Cartoon/wu6if2gg10watk3w6zzu.png",
+    "images/Flower/aln5jsmlwwavub8kpsqh.png",
+    "images/Cute/csbcgbxdvdp2kj7z1wur.png",
+    "images/Cartoon/jr3iyq5anaqde5x8bz5e.png",
+    "images/Trending/Screenshot 2026-11-01 at 12.55.07.png",
+    "images/Trending/Screenshot 2026-11-01 at 12.54.56.png",
+    "images/Cartoon/msnizt7wkys090venahi.png",
+    "images/Fantasy/Screenshot 2026-10-31 at 09.44.16.png"
+  ]
+}

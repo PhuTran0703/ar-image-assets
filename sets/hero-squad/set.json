@@ -1,0 +1,53 @@
+{
+  "order": 5,
+  "name": {
+    "en": "Hero Squad",
+    "vi": "Biệt đội Siêu anh hùng",
+    "ja": "ヒーロー隊",
+    "es": "Escuadrón de héroes",
+    "pt_BR": "Esquadrão de heróis",
+    "zh_Hans": "英雄小队",
+    "zh_Hant": "英雄小隊",
+    "ko": "히어로 특공대",
+    "fr": "Escouade de héros",
+    "de": "Helden-Truppe",
+    "id": "Pasukan Pahlawan",
+    "th": "หน่วยฮีโร่",
+    "ar": "فرقة الأبطال"
+  },
+  "description": {
+    "en": "Assemble a team of 10 caped heroes.",
+    "vi": "Tập hợp đội 10 siêu anh hùng mặc áo choàng.",
+    "ja": "マントのヒーロー10人でチームを結成しよう。",
+    "es": "Reúne un equipo de 10 héroes con capa.",
+    "pt_BR": "Monte uma equipe de 10 heróis de capa.",
+    "zh_Hans": "集结10位披风英雄组成小队。",
+    "zh_Hant": "集結10位披風英雄組成小隊。",
+    "ko": "망토 두른 히어로 10명으로 팀을 꾸려요.",
+    "fr": "Réunis une équipe de 10 héros à cape.",
+    "de": "Stell ein Team aus 10 Helden mit Umhang zusammen.",
+    "id": "Kumpulkan tim 10 pahlawan berjubah.",
+    "th": "รวมทีมฮีโร่ใส่ผ้าคลุม 10 คน",
+    "ar": "اجمع فريقًا من 10 أبطال بعباءات."
+  },
+  "badge": {
+    "emoji": "⚡",
+    "shape": "shield",
+    "colors": [
+      "#5B8CFF",
+      "#2B4FD8"
+    ]
+  },
+  "images": [
+    "images/Superheroes/Screenshot 2026-10-31 at 10.18.44.png",
+    "images/Superheroes/Screenshot 2026-10-31 at 10.20.03.png",
+    "images/Superheroes/Screenshot 2026-10-31 at 10.15.11.png",
+    "images/Superheroes/Screenshot 2026-10-31 at 10.14.58.png",
+    "images/Superheroes/Screenshot 2026-10-31 at 10.13.51.png",
+    "images/Superheroes/Screenshot 2026-10-31 at 10.19.41.png",
+    "images/Superheroes/Screenshot 2026-10-31 at 10.15.50.png",
+    "images/Superheroes/Screenshot 2026-10-31 at 10.16.37.png",
+    "images/Superheroes/Screenshot 2026-10-31 at 10.15.35.png",
+    "images/Superheroes/Screenshot 2026-10-31 at 10.15.31.png"
+  ]
+}

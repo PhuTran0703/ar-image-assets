@@ -1,0 +1,55 @@
+{
+  "order": 1,
+  "name": {
+    "en": "Christmas Countdown",
+    "vi": "Đếm ngược Giáng sinh",
+    "ja": "クリスマスカウントダウン",
+    "es": "Cuenta atrás navideña",
+    "pt_BR": "Contagem para o Natal",
+    "zh_Hans": "圣诞倒计时",
+    "zh_Hant": "聖誕倒數",
+    "ko": "크리스마스 카운트다운",
+    "fr": "Compte à rebours de Noël",
+    "de": "Weihnachts-Countdown",
+    "id": "Hitung Mundur Natal",
+    "th": "นับถอยหลังคริสต์มาส",
+    "ar": "العد التنازلي لعيد الميلاد"
+  },
+  "description": {
+    "en": "10 festive pictures to draw before Christmas.",
+    "vi": "10 bức vẽ rộn ràng đón Giáng sinh.",
+    "ja": "クリスマスまでに描きたい10枚の絵。",
+    "es": "10 dibujos festivos para antes de Navidad.",
+    "pt_BR": "10 desenhos festivos para fazer antes do Natal.",
+    "zh_Hans": "圣诞节前要画的10幅节日画。",
+    "zh_Hant": "聖誕節前要畫的10幅節日畫。",
+    "ko": "크리스마스 전에 그릴 10가지 축제 그림.",
+    "fr": "10 dessins festifs à faire avant Noël.",
+    "de": "10 festliche Bilder zum Zeichnen vor Weihnachten.",
+    "id": "10 gambar meriah untuk digambar sebelum Natal.",
+    "th": "ภาพเทศกาล 10 ภาพให้วาดก่อนคริสต์มาส",
+    "ar": "10 رسومات احتفالية قبل عيد الميلاد."
+  },
+  "badge": {
+    "emoji": "🎄",
+    "shape": "star",
+    "colors": [
+      "#FF5A5F",
+      "#C81D3A"
+    ]
+  },
+  "from": "2026-11-01",
+  "until": "2027-01-10",
+  "images": [
+    "images/Christmas/Screenshot 2026-10-26 at 15.16.21.png",
+    "images/Christmas/r4z3sgpulbqpjv2tjunz.png",
+    "images/Christmas/xtdrgizi6jeovrx8ygf3.png",
+    "images/Christmas/Screenshot 2026-10-26 at 15.26.29.png",
+    "images/Christmas/ssjicgazwdf1zxjxrbe8.png",
+    "images/Christmas/elx44ctwgtecqt51fmes.png",
+    "images/Christmas/hy2i4tm20kadewiav7mc.png",
+    "images/Christmas/iv4ftbxphw7kouls0cr4.png",
+    "images/Christmas/b4t4viizpuvxgni2rp2g.png",
+    "images/Christmas/Screenshot 2026-10-26 at 15.30.18.png"
+  ]
+}
