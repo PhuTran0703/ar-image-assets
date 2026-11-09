@@ -40,6 +40,8 @@ jobs:
           if [ -d sets ]; then cp -R sets _site/sets; fi
           # Privacy Policy / Terms of Use (13 ngôn ngữ) cho app và store.
           cp -R legal _site/legal
+          # Bắt buộc cập nhật: app cũ hơn min_version (theo nền tảng) bị chặn.
+          if [ -f app_config.json ]; then cp app_config.json _site/app_config.json; fi
           python3 - <<'PY'
           import hashlib, json, os, subprocess
           exts = ('.png', '.jpg', '.jpeg', '.webp', '.gif')
